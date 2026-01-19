@@ -136,6 +136,9 @@ i {
 h3 {
     margin: 0;
 }
+h6 {
+    margin: 0;
+}
 
 .todo {
     display: block;
@@ -184,6 +187,14 @@ h3 {
 .undo-btn {
     background: linear-gradient(to right, #70e80d, #0b7830);
 
+}
+
+.profile-icon {
+    height: auto;
+    width: 20px;
+}
+#profile-icon {
+    font-size: 20px;
 }
 
 @keyframes fadeScale {
