@@ -71,7 +71,32 @@
             let todo = document.getElementById('todo-' + todo_id);
             if (todo) {
                 todo.classList.add('deleted-todo');
-                todo.innerHTML = `<h3>${data.todo_title}</h3><button class="delete-btn undo-btn" type="button" onclick="undoTodo(${todo_id})">✔</button>`;
+                todo.innerHTML = `<h3>${data.title}</h3><button class="delete-btn undo-btn" type="button" onclick="undoTodo(${todo_id})">✔</button>`;
+            }
+        } else {
+            console.error('Error:', data);
+            alert('Failed to delete todo');
+        }
+    }
+    async function undoTodo(todo_id) {
+        const response = await fetch("{% url 'complete_todo' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                'id': todo_id
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            let todo = document.getElementById('todo-' + todo_id);
+            if (todo) {
+                todo.classList.remove('deleted-todo');
+                todo.innerHTML = `<h3>${data.title}</h3><button class="delete-btn" type="button" onclick="deleteTodo(${todo_id})">🔘</button>`;
             }
         } else {
             console.error('Error:', data);
