@@ -21,28 +21,29 @@
         <h1>Todos</h1>
         <div class="content">
             <!-- Add Todo Form -->
-            <form method="post" action="{% url 'add_todo' %}">
+            <form method="post">
                 {% csrf_token %}
                 <input type="text" id="title" name="title" placeholder="new todo...">
-                <button class="add-btn" type="submit">➕</button>
+                <button class="add-btn" type="button" onclick="addTodo()">➕</button>
                 <hr>
             </form>
 
             <!-- Todos List -->
             <div id="content">
                 {% for todo in todos %}
-                    {% if todo.is_complete %}
-                        <div class="todo deleted-todo" id="todo-{{ todo.id }}">
-                            <h3>{{ todo.title }}</h3>
-                            <button class="delete-btn undo-btn" type="button" onclick="undoTodo({{ todo.id }})">✔
-                            </button>
-                        </div>
-                    {% else %}
-                        <div class="todo" id="todo-{{ todo.id }}">
-                            <h3>{{ todo.title }}</h3>
-                            <button class="delete-btn" type="button" onclick="deleteTodo({{ todo.id }})">🔘</button>
-                        </div>
-                    {% endif %}
+                    <div class="todo" id="todo-{{ todo.id }}">
+                        <h3>{{ todo.title }}</h3>
+                        <button class="delete-btn" type="button" onclick="deleteTodo({{ todo.id }})">🔘</button>
+                    </div>
+
+                {% endfor %}
+                {% for todo in deleted_todos %}
+
+                    <div class="todo deleted-todo" id="todo-{{ todo.id }}">
+                        <h3>{{ todo.title }}</h3>
+                        <button class="delete-btn undo-btn" type="button" onclick="undoTodo({{ todo.id }})">✔
+                        </button>
+                    </div>
                 {% endfor %}
             </div>
         </div>
@@ -80,6 +81,8 @@
 
     async function addTodo() {
         const title = document.getElementById('title').value;
+        document.getElementById('title').value = '';
+        console.log(title)
 
         if (title.trim()) {
             await fetch("{% url 'add_todo' %}", {
@@ -94,6 +97,7 @@
             })
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data)
                     if (data.status === 'success') {
                         const todoHTML = `
                     <div class="todo" id="todo-${data.id}">
@@ -101,7 +105,7 @@
                         <button class="delete-btn" type="button" onclick="deleteTodo(${data.id})">🔘</button>
                     </div>
                 `;
-                        document.getElementById('content').insertAdjacentHTML('beforeend', todoHTML);
+                        document.getElementById('content').insertAdjacentHTML('afterbegin', todoHTML);
                     } else {
                         alert(data.error);
                     }

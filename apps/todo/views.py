@@ -8,9 +8,10 @@ import json
 
 @login_required
 def index(request):
-    todos = Todo.objects.filter(owner=request.user).order_by('is_complete')
-    todos = todos.order_by('-created_at')
-    return render(request, 'index.html', {'todos': todos})
+    todos = Todo.objects.filter(owner=request.user).order_by('-created_at')
+    deleted_todos = todos.filter(is_complete=True)
+    todos = todos.filter(is_complete=False)
+    return render(request, 'index.html', {'todos': todos, 'deleted_todos':deleted_todos})
 
 
 @login_required
@@ -21,14 +22,30 @@ def profile(request):
 @login_required
 def add_todo(request):
     if request.method == "POST":
-        title = request.POST.get('title')
-        if title:
-            todo = Todo(title=title, owner=request.user)
-            todo.save()
-            return redirect(reverse('index'))
-        return JsonResponse({'status': 'fail', 'error': 'No title provided'})
+        try:
+            # Parse the incoming JSON request body
+            data = json.loads(request.body)
+            title = data.get('title')
+
+            if title:
+                # Create and save the todo
+                todo = Todo(title=title, owner=request.user)
+                todo.save()
+
+                return JsonResponse({
+                    'status': 'success',
+                    'id': todo.id,
+                    'title': todo.title,
+                    'is_complete': todo.is_complete
+                })
+            else:
+                return JsonResponse({'status': 'fail', 'error': 'No title provided'})
+
+        except json.JSONDecodeError:
+            return JsonResponse({'status': 'fail', 'error': 'Invalid JSON data'})
 
     return JsonResponse({'status': 'fail', 'error': 'Invalid request method'})
+
 
 
 @login_required
