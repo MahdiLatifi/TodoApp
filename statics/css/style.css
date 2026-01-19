@@ -169,11 +169,16 @@ h3 {
     width: auto;
     padding: revert;
     position: relative;
-    bottom: 23px;
+    bottom: 27px;
     right: -234px;
     background: none;
     cursor: pointer;
     transition: 0.5s;
+}
+
+.delete-btn:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 .undo-btn {

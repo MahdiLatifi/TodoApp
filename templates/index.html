@@ -17,13 +17,13 @@
     <div class="div-form" id="login-form">
         <h1>Todos</h1>
         <div class="content">
-            <div class="todo">
+            <div class="todo" id="todo-1">
                 <h3>todo 1</h3>
-                <i class="delete-btn" type="button">🔘</i>
+                <button class="delete-btn" type="button" onclick="deleteTodo(1)">🔘</button>
             </div>
-            <div class="todo deleted-todo">
+            <div class="todo deleted-todo" id="todo-2">
                 <h3>todo 4</h3>
-                <button class="delete-btn undo-btn" type="button">✔</button>
+                <button class="delete-btn undo-btn" type="button" onclick="undoTodo(2)">✔</button>
             </div>
         </div>
     </div>

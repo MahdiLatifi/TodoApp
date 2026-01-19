@@ -1,3 +1,13 @@
-function clickedDelete() {
+async function deleteTodo(todo_id) {
+    let todo = document.getElementById('todo-' + todo_id)
+    if (todo) {
+        todo.classList.add('deleted-todo')
+        todo.innerHTML = "<h3>todo " + todo_id + "</h3>\n" + "<button class=\"delete-btn undo-btn\" type=\"button\" onclick=\"undoTodo(" + todo_id + ")\">✔</button>"
+    }
+}
 
+async function undoTodo(todo_id) {
+    let todo = document.getElementById('todo-' + todo_id)
+    todo.classList.remove('deleted-todo')
+    todo.innerHTML = "<h3>todo " + todo_id + "</h3>\n" + "<button class=\"delete-btn\" type=\"button\" onclick=\"deleteTodo(" + todo_id + ")\">🔘</button>"
 }
