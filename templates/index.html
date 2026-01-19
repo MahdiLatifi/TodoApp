@@ -50,10 +50,8 @@
 </div>
 
 <script>
-    // CSRF Token setup for fetch requests
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    // Delete Todo function
     async function deleteTodo(todo_id) {
         const response = await fetch("{% url 'complete_todo' %}", {
             method: 'POST',
