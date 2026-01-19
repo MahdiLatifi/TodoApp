@@ -1,0 +1,62 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {#    <link rel="preload" href="{% static 'fonts/niafam-icons.woff' %}" as="font" type="font/woff" crossorigin>#}
+    {#    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">#}
+</head>
+
+<body>
+<div class="container">
+    <div class="div-form" id="login-form">
+        <div class="profile-icon">
+            <a href="{% url 'profile' %}" id="profile-icon">👤</a>
+            <h6>profile</h6>
+        </div>
+        <h1>Profile</h1>
+        <div class="content">
+            <div class="todo user-detail" id="todo-1">
+                <h3>Name:</h3>
+                <p>mahdi</p>
+            </div>
+            <div class="todo user-detail" id="todo-2">
+                <h3>Lastname:</h3>
+                <p>latifi</p>
+            </div>
+            <div class="todo user-detail" id="todo-2">
+                <h3>All Todos:</h3>
+                <p>15</p>
+            </div>
+            <div class="todo user-detail" id="todo-2">
+                <h3>Active Todos:</h3>
+                <p>6</p>
+            </div>
+            <button type="button">Complete Profile</button>
+        </div>
+        <div class="update-form hidden">
+            <form method="post" action="#">
+                <div class="label_and_input">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="label_and_input">
+                    <label for="lastname">Lastname</label>
+                    <input type="text" id="lastname" name="lastname" required>
+                </div>
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="{% static 'js/app.js' %}"></script>
+</body>
+
+</html>
