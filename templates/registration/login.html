@@ -12,88 +12,88 @@
 </head>
 
 <body>
-    <div class="container">
+<div class="container">
 
-        <!-- login  -->
-        <div class="div-form" id="login-form">
-            <h1>Login</h1>
-            <form method="post" action="{% url 'auth:login' %}">
-                {% csrf_token %}
-                <div class="label_and_input">
-                    <label for="username">Username</label>
-                    {{ login_form.username }}
-{#                    <input type="text" id="username" name="login_username" required>#}
-                </div>
-                <div class="label_and_input">
-                    <label for="login-pass">Password</label>
-                    {{ login_form.password }}
-{#                    <input type="password" id="login-pass" name="login_pass" required>#}
-                    <i class="material-icons" onclick="changeEyeToOpen()" id="closeEye">visibility_off</i>
-                    <i class="material-icons hidden" onclick="changeEyeToClose()" id="openEye">visibility</i>
-                </div>
-                {% for field, error_list in errors.items %}
+    <!-- login  -->
+    <div class="div-form" id="login-form">
+        <h1>Login</h1>
+        <form method="post" action="{% url 'auth:login' %}">
+            {% csrf_token %}
+            <div class="label_and_input">
+                <label for="username">Username</label>
+                {{ login_form.username }}
+                {#                    <input type="text" id="username" name="login_username" required>#}
+            </div>
+            <div class="label_and_input">
+                <label for="login-pass">Password</label>
+                {{ login_form.password }}
+                {#                    <input type="password" id="login-pass" name="login_pass" required>#}
+                <i class="material-icons" onclick="changeEyeToOpen()" id="closeEye">visibility_off</i>
+                <i class="material-icons hidden" onclick="changeEyeToClose()" id="openEye">visibility</i>
+            </div>
+            {% for field, error_list in errors.items %}
                 {% for error in error_list %}
                     <ul>
                         <li class="error">{{ error }}</li>
                     </ul>
                 {% endfor %}
             {% endfor %}
-                <button type="submit">Login</button>
-            </form>
-            <p class="account_text">
-                Don't have an account?
-                <a href="{% url 'auth:signup' %}" id="sign_up_link" >Sign Up</a>
-            </p>
+            <button type="submit">Login</button>
+        </form>
+        <p class="account_text">
+            Don't have an account?
+            <a href="{% url 'auth:signup' %}" id="sign_up_link">Sign Up</a>
+        </p>
 
-        </div>
-
-{#        <!-- sign up  -->#}
-{#        <div class="div-form hidden" id="sign-up-form">#}
-{#            <h1>Sign Up</h1>#}
-{#            <form onsubmit="return clickedSignUp()"  method="post" action="{% url 'signup' %}">#}
-{#                {% csrf_token %}#}
-{#                <div class="label_and_input">#}
-{#                    <label for="name">Full Name</label>#}
-{#                    {{ signup_form.username }}#}
-{#                    <input type="text" id="name" name="signup_name" required>#}
-{#                </div>#}
-{#                <div class="label_and_input">#}
-{#                    <label for="email">Email</label>#}
-{#                    {{ signup_form.email }}#}
-{#                    <input type="email" id="email" name="signup_email" required>#}
-{#                </div>#}
-{#                <div class="label_and_input">#}
-{#                    <label for="pass">Password</label>#}
-{#                    {{ signup_form.password1 }}#}
-{#                    <input type="password" id="pass" name="signup_pass" required>#}
-{#                </div>#}
-{#                <div class="label_and_input">#}
-{#                    <label for="con-pass">Confirm Password</label>#}
-{#                    {{ signup_form.password2 }}#}
-{#                    <input type="password" id="con-pass" name="signup_con_pass" required>#}
-{#                </div>#}
-{##}
-{#                {% if errors %}#}
-{#                    {{ errors }}#}
-{##}
-{#                {% endif %}#}
-{#                <ul>#}
-{#                    <li class="error hidden" id="name_error">Full Name should be more than 3 characters!</li>#}
-{#                    <li class="error hidden" id="pass_len_error">The password should be at least 8 characters!</li>#}
-{#                    <li class="error hidden" id="not_same_pass_error">The passwords are not the same!</li>#}
-{#                    <li class="error hidden" id="email_exist_error">Email exist</li>#}
-{#                </ul>#}
-{##}
-{#                <button type="submit">Sign Up</button>#}
-{#            </form>#}
-{#            <p class="account_text">#}
-{#                Already have an account?#}
-{#                <a href="#" id="login_link" onclick="change_to_login()">Login</a>#}
-{#            </p>#}
-{#        </div>#}
     </div>
 
-    <script src="{% static 'js/app.js' %}"></script>
+    {#        <!-- sign up  -->#}
+    {#        <div class="div-form hidden" id="sign-up-form">#}
+    {#            <h1>Sign Up</h1>#}
+    {#            <form onsubmit="return clickedSignUp()"  method="post" action="{% url 'signup' %}">#}
+    {#                {% csrf_token %}#}
+    {#                <div class="label_and_input">#}
+    {#                    <label for="name">Full Name</label>#}
+    {#                    {{ signup_form.username }}#}
+    {#                    <input type="text" id="name" name="signup_name" required>#}
+    {#                </div>#}
+    {#                <div class="label_and_input">#}
+    {#                    <label for="email">Email</label>#}
+    {#                    {{ signup_form.email }}#}
+    {#                    <input type="email" id="email" name="signup_email" required>#}
+    {#                </div>#}
+    {#                <div class="label_and_input">#}
+    {#                    <label for="pass">Password</label>#}
+    {#                    {{ signup_form.password1 }}#}
+    {#                    <input type="password" id="pass" name="signup_pass" required>#}
+    {#                </div>#}
+    {#                <div class="label_and_input">#}
+    {#                    <label for="con-pass">Confirm Password</label>#}
+    {#                    {{ signup_form.password2 }}#}
+    {#                    <input type="password" id="con-pass" name="signup_con_pass" required>#}
+    {#                </div>#}
+    {##}
+    {#                {% if errors %}#}
+    {#                    {{ errors }}#}
+    {##}
+    {#                {% endif %}#}
+    {#                <ul>#}
+    {#                    <li class="error hidden" id="name_error">Full Name should be more than 3 characters!</li>#}
+    {#                    <li class="error hidden" id="pass_len_error">The password should be at least 8 characters!</li>#}
+    {#                    <li class="error hidden" id="not_same_pass_error">The passwords are not the same!</li>#}
+    {#                    <li class="error hidden" id="email_exist_error">Email exist</li>#}
+    {#                </ul>#}
+    {##}
+    {#                <button type="submit">Sign Up</button>#}
+    {#            </form>#}
+    {#            <p class="account_text">#}
+    {#                Already have an account?#}
+    {#                <a href="#" id="login_link" onclick="change_to_login()">Login</a>#}
+    {#            </p>#}
+    {#        </div>#}
+</div>
+
+<script src="{% static 'js/app.js' %}"></script>
 </body>
 
 </html>

@@ -9,6 +9,7 @@ import json
 @login_required
 def index(request):
     todos = Todo.objects.filter(owner=request.user).order_by('is_complete')
+    todos = todos.order_by('-created_at')
     return render(request, 'index.html', {'todos': todos})
 
 
