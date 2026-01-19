@@ -7,7 +7,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Signup Project</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="preload" href="{% static 'fonts/niafam-icons.woff' %}" as="font" type="font/woff" crossorigin>
     {#    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">#}
 </head>
 
@@ -16,9 +17,22 @@
     <div class="div-form" id="login-form">
         <h1>Todos</h1>
         <div class="content">
-            <div class="todo"><h3>todo 1</h3> </div>
-            <div class="todo"><h3>todo 2</h3> </div>
-            <div class="todo"><h3>todo 3</h3> </div>
+            <div class="todo">
+                <h3>todo 1</h3>
+                <button class="delete-btn" type="button">delete</button>
+            </div>
+            <div class="todo">
+                <h3>todo 2</h3>
+                <button class="delete-btn" type="button">delete</button>
+            </div>
+            <div class="todo">
+                <h3>todo 3</h3>
+                <button class="delete-btn" type="button">delete</button>
+            </div>
+            <div class="todo">
+                <h3>todo 4</h3>
+                <button class="delete-btn" type="button">delete</button>
+            </div>
         </div>
     </div>
 </div>
