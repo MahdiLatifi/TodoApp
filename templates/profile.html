@@ -20,7 +20,7 @@
             <h6>profile</h6>
         </div>
         <h1>Profile</h1>
-        <div class="content">
+        <div class="content" id="content">
             <div class="todo user-detail" id="todo-1">
                 <h3>Name:</h3>
                 <p>mahdi</p>
@@ -37,9 +37,9 @@
                 <h3>Active Todos:</h3>
                 <p>6</p>
             </div>
-            <button type="button">Complete Profile</button>
+            <button type="button" onclick="showChangeName()">Complete Profile</button>
         </div>
-        <div class="update-form hidden">
+        <div class="update-form hidden" id="update-form">
             <form method="post" action="#">
                 <div class="label_and_input">
                     <label for="name">Name</label>
@@ -49,7 +49,10 @@
                     <label for="lastname">Lastname</label>
                     <input type="text" id="lastname" name="lastname" required>
                 </div>
-                <button type="submit">Update</button>
+                <div class="update-btn">
+                    <button type="button" onclick="showUserDetail()">Back</button>
+                    <button type="submit">Update</button>
+                </div>
             </form>
         </div>
     </div>

@@ -136,6 +136,7 @@ i {
 h3 {
     margin: 0;
 }
+
 h6 {
     margin: 0;
 }
@@ -199,14 +200,24 @@ p {
     height: auto;
     width: 20px;
 }
+
 #profile-icon {
     font-size: 20px;
 }
 
 .user-detail {
     display: flex;
-        justify-content: space-between;
+    justify-content: space-between;
 
+}
+
+.update-btn {
+    display: flex;
+    justify-content: space-between;
+}
+.update-btn > * {
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .user-detail:hover {
