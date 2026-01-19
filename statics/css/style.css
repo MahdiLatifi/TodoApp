@@ -199,6 +199,7 @@ p {
 .profile-icon {
     height: auto;
     width: 20px;
+    margin: 10px;
 }
 
 #profile-icon {
@@ -211,10 +212,18 @@ p {
 
 }
 
+
+.header {
+    display: flex;
+    justify-content: space-between;
+
+}
+
 .update-btn {
     display: flex;
     justify-content: space-between;
 }
+
 .update-btn > * {
     margin-left: 10px;
     margin-right: 10px;
