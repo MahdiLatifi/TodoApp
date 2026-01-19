@@ -20,22 +20,32 @@
         <h1>Todos</h1>
         <div class="content">
             <form method="post" action="{% url 'add_todo' %}">
+                {% csrf_token %}
                 <input type="text" id="title" name="title" placeholder="new todo...">
                 <button class="add-btn" type="submit">➕</button>
                 <hr>
             </form>
-            <div class="todo" id="todo-1">
-                <h3>todo 1</h3>
-                <button class="delete-btn" type="button" onclick="deleteTodo(1)">🔘</button>
-            </div>
-            <div class="todo deleted-todo" id="todo-2">
-                <h3>todo 4</h3>
-                <button class="delete-btn undo-btn" type="button" onclick="undoTodo(2)">✔</button>
+            <div id="content">
+                {% for todo in todos %}
+                    {% if todo.is_complete %}
+                        <div class="todo deleted-todo" id="todo-{{ todo.id }}">
+                            <h3>{{ todo.title }}</h3>
+                            <button class="delete-btn undo-btn" type="button" onclick="undoTodo({{ todo.id }})">✔</button>
+                        </div>
+                    {% else %}
+                        <div class="todo" id="todo-{{ todo.id }}">
+                            <h3>{{ todo.title }}</h3>
+                            <button class="delete-btn" type="button" onclick="deleteTodo({{ todo.id }})">🔘</button>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
     </div>
 </div>
-
+<script>
+    const addTodoUrl = "{% url 'add_todo' %}"
+</script>
 <script src="{% static 'js/app.js' %}"></script>
 </body>
 
