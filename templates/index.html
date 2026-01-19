@@ -9,8 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todos</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    {#    <link rel="preload" href="{% static 'fonts/niafam-icons.woff' %}" as="font" type="font/woff" crossorigin>#}
-    {#    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">#}
+    {# Preload fonts (uncomment if necessary) #}
+    {# <link rel="preload" href="{% static 'fonts/niafam-icons.woff' %}" as="font" type="font/woff" crossorigin> #}
+    {# <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> #}
 </head>
 
 <body>
@@ -19,18 +20,22 @@
         {% header %}
         <h1>Todos</h1>
         <div class="content">
+            <!-- Add Todo Form -->
             <form method="post" action="{% url 'add_todo' %}">
                 {% csrf_token %}
                 <input type="text" id="title" name="title" placeholder="new todo...">
                 <button class="add-btn" type="submit">➕</button>
                 <hr>
             </form>
+
+            <!-- Todos List -->
             <div id="content">
                 {% for todo in todos %}
                     {% if todo.is_complete %}
                         <div class="todo deleted-todo" id="todo-{{ todo.id }}">
                             <h3>{{ todo.title }}</h3>
-                            <button class="delete-btn undo-btn" type="button" onclick="undoTodo({{ todo.id }})">✔</button>
+                            <button class="delete-btn undo-btn" type="button" onclick="undoTodo({{ todo.id }})">✔
+                            </button>
                         </div>
                     {% else %}
                         <div class="todo" id="todo-{{ todo.id }}">
@@ -43,9 +48,72 @@
         </div>
     </div>
 </div>
+
 <script>
-    const addTodoUrl = "{% url 'add_todo' %}"
+    // CSRF Token setup for fetch requests
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    // Delete Todo function
+    async function deleteTodo(todo_id) {
+        const response = await fetch("{% url 'complete_todo' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                'id': todo_id
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            let todo = document.getElementById('todo-' + todo_id);
+            if (todo) {
+                todo.classList.add('deleted-todo');
+                todo.innerHTML = `<h3>${data.todo_title}</h3><button class="delete-btn undo-btn" type="button" onclick="undoTodo(${todo_id})">✔</button>`;
+            }
+        } else {
+            console.error('Error:', data);
+            alert('Failed to delete todo');
+        }
+    }
+
+    async function addTodo() {
+        const title = document.getElementById('title').value;
+
+        if (title.trim()) {
+            await fetch("{% url 'add_todo' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({
+                    'title': title
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        const todoHTML = `
+                    <div class="todo" id="todo-${data.id}">
+                        <h3>${data.title}</h3>
+                        <button class="delete-btn" type="button" onclick="deleteTodo(${data.id})">🔘</button>
+                    </div>
+                `;
+                        document.getElementById('content').insertAdjacentHTML('beforeend', todoHTML);
+                    } else {
+                        alert(data.error);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    }
+
 </script>
+
 <script src="{% static 'js/app.js' %}"></script>
 </body>
 
