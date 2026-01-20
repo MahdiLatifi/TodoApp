@@ -43,6 +43,8 @@
                         <h3>{{ todo.title }}</h3>
                         <button class="delete-btn undo-btn" type="button" onclick="undoTodo({{ todo.id }})">✔
                         </button>
+                        <button class="delete-btn all-delete-btn" type="button" onclick="undoTodo({{ todo.id }})">🗑️
+                        </button>
                     </div>
                 {% endfor %}
             </div>
@@ -71,7 +73,7 @@
             let todo = document.getElementById('todo-' + todo_id);
             if (todo) {
                 todo.classList.add('deleted-todo');
-                todo.innerHTML = `<h3>${data.title}</h3><button class="delete-btn undo-btn" type="button" onclick="undoTodo(${todo_id})">✔</button>`;
+                todo.innerHTML = `<h3>${data.title}</h3><button class="delete-btn undo-btn" type="button" onclick="undoTodo(${todo_id})">✔</button><button class="delete-btn all-delete-btn" type="button" onclick="undoTodo(${todo_id})">🗑️</button>`;
             }
         } else {
             console.error('Error:', data);

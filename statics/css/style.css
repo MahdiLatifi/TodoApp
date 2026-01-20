@@ -218,6 +218,12 @@ p {
 
 }
 
+.all-delete-btn {
+    background: linear-gradient(to right, #e80d0d, #780b66);
+    bottom: 27px;
+    right: -151px;
+}
+
 .profile-icon {
     height: auto;
     width: 20px;
