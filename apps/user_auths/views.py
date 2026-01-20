@@ -9,7 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 def login_view(request):
     if request.method == "POST":
         if request.user.is_authenticated:
-            return redirect('/')
+            return redirect(reverse('index'))
         form = AuthenticationForm(request=request, data=request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
@@ -17,7 +17,7 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
-            return redirect('/')
+            return redirect(reverse('index'))
         else:
             login_form = AuthenticationForm()
             return render(request, 'registration/login.html', {'login_form': login_form, 'errors': form.errors})
@@ -28,7 +28,7 @@ def login_view(request):
 @login_required(login_url='http://127.0.0.1:8000/auth/login')
 def logout_view(request):
     logout(request)
-    return redirect('/')
+    return redirect(reverse('index'))
 
 
 def signup_view(request):
@@ -37,7 +37,7 @@ def signup_view(request):
         print(form.is_valid())
         if form.is_valid():
             form.save()
-            return redirect('auth/login')
+            return redirect(reverse('auth:login'))
         else:
             signup_form = UserCreationForm()
             return render(request, 'registration/signup.html', {'signup_form': signup_form, 'errors': form.errors})
