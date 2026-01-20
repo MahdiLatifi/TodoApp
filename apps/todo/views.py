@@ -8,7 +8,8 @@ import json
 
 @login_required
 def index(request):
-    todos = Todo.objects.filter(owner=request.user).order_by('-created_at')
+    todos = Todo.objects.filter(is_deleted=False)
+    todos = todos.filter(owner=request.user).order_by('-created_at')
     deleted_todos = todos.filter(is_complete=True)
     todos = todos.filter(is_complete=False)
     return render(request, 'index.html', {'todos': todos, 'deleted_todos': deleted_todos})
@@ -17,7 +18,8 @@ def index(request):
 @login_required
 def profile(request):
     user = request.user
-    active_todos_count = Todo.objects.filter(is_complete=False).count()
+    todos = Todo.objects.filter(is_deleted=False)
+    active_todos_count = todos.filter(is_complete=False).count()
     return render(request, "profile.html", {'user': user, 'active_todos_count': active_todos_count})
 
 
@@ -65,6 +67,25 @@ def complete_todo(request):
                 'id': todo.id,
                 'title': todo.title,
                 'is_complete': todo.is_complete
+            })
+
+        return JsonResponse({'status': 'fail', 'error': 'Todo ID not provided'})
+
+    return JsonResponse({'status': 'fail', 'error': 'Invalid request method'})
+
+@login_required
+def delete_todo(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        todo_id = data.get('id')
+
+        if todo_id:
+            todo = get_object_or_404(Todo, pk=todo_id, owner=request.user)
+            todo.is_deleted = True
+            todo.save()
+
+            return JsonResponse({
+                'status': 'success',
             })
 
         return JsonResponse({'status': 'fail', 'error': 'Todo ID not provided'})

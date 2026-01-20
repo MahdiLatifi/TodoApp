@@ -43,7 +43,7 @@
                         <h3>{{ todo.title }}</h3>
                         <button class="delete-btn undo-btn" type="button" onclick="undoTodo({{ todo.id }})">✔
                         </button>
-                        <button class="delete-btn all-delete-btn" type="button" onclick="undoTodo({{ todo.id }})">🗑️
+                        <button class="delete-btn all-delete-btn" type="button" onclick="allDeleteTodo({{ todo.id }})">🗑️
                         </button>
                     </div>
                 {% endfor %}
@@ -73,13 +73,14 @@
             let todo = document.getElementById('todo-' + todo_id);
             if (todo) {
                 todo.classList.add('deleted-todo');
-                todo.innerHTML = `<h3>${data.title}</h3><button class="delete-btn undo-btn" type="button" onclick="undoTodo(${todo_id})">✔</button><button class="delete-btn all-delete-btn" type="button" onclick="undoTodo(${todo_id})">🗑️</button>`;
+                todo.innerHTML = `<h3>${data.title}</h3><button class="delete-btn undo-btn" type="button" onclick="undoTodo(${todo_id})">✔</button><button class="delete-btn all-delete-btn" type="button" onclick="allDeleteTodo(${todo_id})">🗑️</button>`;
             }
         } else {
             console.error('Error:', data);
             alert('Failed to delete todo');
         }
     }
+
     async function undoTodo(todo_id) {
         const response = await fetch("{% url 'complete_todo' %}", {
             method: 'POST',
@@ -104,6 +105,29 @@
             console.error('Error:', data);
             alert('Failed to delete todo');
         }
+    }
+
+    async function allDeleteTodo(todo_id) {
+        await fetch("{% url 'delete_todo' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({
+                'id': todo_id
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.status === 'success') {
+                    document.getElementById(`todo-${todo_id}`).remove()
+                } else {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     async function addTodo() {
