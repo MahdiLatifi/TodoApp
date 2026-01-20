@@ -18,7 +18,7 @@
 <div class="container">
     <div class="div-form" id="login-form">
         {% header %}
-        <h1>Todos</h1>
+        <h1>{% if request.user.first_name %}{{ request.user.first_name }}'s Todos{% else %}Todos{% endif %}</h1>
         <div class="content">
             <!-- Add Todo Form -->
             <form method="post">

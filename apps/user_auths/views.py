@@ -43,3 +43,16 @@ def signup_view(request):
             return render(request, 'registration/signup.html', {'signup_form': signup_form, 'errors': form.errors})
     signup_form = UserCreationForm()
     return render(request, 'registration/signup.html', {'signup_form': signup_form})
+
+
+@login_required
+def complete_profile(request):
+    if request.method == "POST":
+        user = request.user
+        first_name = request.POST.get('name')
+        last_name = request.POST.get('lastname')
+        if first_name and last_name:
+            user.first_name = first_name
+            user.last_name = last_name
+            user.save()
+    return redirect(reverse('profile'))

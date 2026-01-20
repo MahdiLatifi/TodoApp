@@ -21,24 +21,25 @@
         <div class="content" id="content">
             <div class="todo user-detail" id="todo-1">
                 <h3>Name:</h3>
-                <p>mahdi</p>
+                <p>{% if user.first_name %}{{ user.first_name }}{% else %}{% endif %}</p>
             </div>
             <div class="todo user-detail" id="todo-2">
                 <h3>Lastname:</h3>
-                <p>latifi</p>
+                <p>{% if user.last_name %}{{ user.last_name }}{% else %}{% endif %}</p>
             </div>
             <div class="todo user-detail" id="todo-2">
                 <h3>All Todos:</h3>
-                <p>15</p>
+                <p>{{ user.todos.count }}</p>
             </div>
             <div class="todo user-detail" id="todo-2">
                 <h3>Active Todos:</h3>
-                <p>6</p>
+                <p>{{ active_todos_count }}</p>
             </div>
             <button type="button" onclick="showChangeName()">Complete Profile</button>
         </div>
         <div class="update-form hidden" id="update-form">
-            <form method="post" action="#">
+            <form method="post" action="{% url 'auth:complete_profile' %}">
+                {% csrf_token %}
                 <div class="label_and_input">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" required>

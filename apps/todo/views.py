@@ -11,12 +11,14 @@ def index(request):
     todos = Todo.objects.filter(owner=request.user).order_by('-created_at')
     deleted_todos = todos.filter(is_complete=True)
     todos = todos.filter(is_complete=False)
-    return render(request, 'index.html', {'todos': todos, 'deleted_todos':deleted_todos})
+    return render(request, 'index.html', {'todos': todos, 'deleted_todos': deleted_todos})
 
 
 @login_required
 def profile(request):
-    return render(request, "profile.html")
+    user = request.user
+    active_todos_count = Todo.objects.filter(is_complete=False).count()
+    return render(request, "profile.html", {'user': user, 'active_todos_count': active_todos_count})
 
 
 @login_required
@@ -45,7 +47,6 @@ def add_todo(request):
             return JsonResponse({'status': 'fail', 'error': 'Invalid JSON data'})
 
     return JsonResponse({'status': 'fail', 'error': 'Invalid request method'})
-
 
 
 @login_required
