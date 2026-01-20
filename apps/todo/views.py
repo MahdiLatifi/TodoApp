@@ -20,7 +20,7 @@ def profile(request):
     user = request.user
     todos = Todo.objects.filter(is_deleted=False)
     active_todos_count = todos.filter(is_complete=False).count()
-    return render(request, "profile.html", {'user': user, 'active_todos_count': active_todos_count})
+    return render(request, "profile.html", {'user': user, 'todos': todos, 'active_todos_count': active_todos_count})
 
 
 @login_required
@@ -72,6 +72,7 @@ def complete_todo(request):
         return JsonResponse({'status': 'fail', 'error': 'Todo ID not provided'})
 
     return JsonResponse({'status': 'fail', 'error': 'Invalid request method'})
+
 
 @login_required
 def delete_todo(request):
