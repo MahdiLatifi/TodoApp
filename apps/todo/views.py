@@ -28,8 +28,13 @@ def add_todo(request):
     if request.method == "POST":
         try:
             # Parse the incoming JSON request body
-            data = json.loads(request.body)
-            title = data.get('title')
+            try:
+                my_method = 'js'
+                data = json.loads(request.body)
+                title = data.get('title')
+            except:
+                title = request.POST.get('title')
+                my_method = 'enter'
 
             if title:
                 # Create and save the todo
@@ -41,7 +46,7 @@ def add_todo(request):
                     'id': todo.id,
                     'title': todo.title,
                     'is_complete': todo.is_complete
-                })
+                }) if my_method == 'js' else redirect(reverse('index'))
             else:
                 return JsonResponse({'status': 'fail', 'error': 'No title provided'})
 

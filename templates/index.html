@@ -21,9 +21,9 @@
         <h1>{% if request.user.first_name %}{{ request.user.first_name }}'s Todos{% else %}Todos{% endif %}</h1>
         <div class="content">
             <!-- Add Todo Form -->
-            <form method="post">
+            <form method="post" action="{% url 'add_todo' %}">
                 {% csrf_token %}
-                <input type="text" id="title" name="title" placeholder="new todo...">
+                <label for="title"></label><input type="text" id="title" name="title" placeholder="new todo...">
                 <button class="add-btn" type="button" onclick="addTodo()">➕</button>
                 <hr>
             </form>
