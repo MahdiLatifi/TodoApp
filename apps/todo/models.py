@@ -10,3 +10,7 @@ class Todo(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_deleted = models.BooleanField(default=False)
+
+    @property
+    def truncated_title(self):
+        return self.title[:14] + '...' if len(self.title) > 14 else self.title

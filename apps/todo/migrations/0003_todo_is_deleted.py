@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('todo', '0002_todo_created_at_todo_updated_at'),
     ]

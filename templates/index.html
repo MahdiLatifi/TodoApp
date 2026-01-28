@@ -32,7 +32,7 @@
             <div id="content">
                 {% for todo in todos %}
                     <div class="todo" id="todo-{{ todo.id }}">
-                        <h3>{{ todo.title }}</h3>
+                        <h3>{{ todo.truncated_title }}</h3>
                         <button class="delete-btn" type="button" onclick="deleteTodo({{ todo.id }})">🔘</button>
                     </div>
 
@@ -40,10 +40,11 @@
                 {% for todo in deleted_todos %}
 
                     <div class="todo deleted-todo" id="todo-{{ todo.id }}">
-                        <h3>{{ todo.title }}</h3>
+                        <h3>{{ todo.truncated_title }}</h3>
                         <button class="delete-btn undo-btn" type="button" onclick="undoTodo({{ todo.id }})">✔
                         </button>
-                        <button class="delete-btn all-delete-btn" type="button" onclick="allDeleteTodo({{ todo.id }})">🗑️
+                        <button class="delete-btn all-delete-btn" type="button" onclick="allDeleteTodo({{ todo.id }})">
+                            🗑️
                         </button>
                     </div>
                 {% endfor %}

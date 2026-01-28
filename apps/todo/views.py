@@ -44,7 +44,7 @@ def add_todo(request):
                 return JsonResponse({
                     'status': 'success',
                     'id': todo.id,
-                    'title': todo.title,
+                    'title': todo.truncated_title,
                     'is_complete': todo.is_complete
                 }) if my_method == 'js' else redirect(reverse('index'))
             else:
@@ -70,7 +70,7 @@ def complete_todo(request):
             return JsonResponse({
                 'status': 'success',
                 'id': todo.id,
-                'title': todo.title,
+                'title': todo.truncated_title,
                 'is_complete': todo.is_complete
             })
 
