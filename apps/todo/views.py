@@ -2,17 +2,32 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Todo
 import json
 
 
-@login_required
-def index(request):
-    todos = Todo.objects.filter(is_deleted=False)
-    todos = todos.filter(owner=request.user).order_by('-created_at')
-    deleted_todos = todos.filter(is_complete=True)
-    todos = todos.filter(is_complete=False)
-    return render(request, 'index.html', {'todos': todos, 'deleted_todos': deleted_todos})
+class IndexView(LoginRequiredMixin, ListView):
+    model = Todo
+    template_name = 'index.html'
+    context_object_name = 'todos'
+
+    def get_queryset(self):
+        return Todo.objects.filter(
+            owner=self.request.user,
+            is_deleted=False,
+            is_complete=False
+        ).order_by('-created_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['deleted_todos'] = Todo.objects.filter(
+            owner=self.request.user,
+            is_deleted=False,
+            is_complete=True
+        ).order_by('-created_at')
+        return context
 
 
 @login_required
