@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Todo
 import json
@@ -44,16 +44,20 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
 @login_required
 @require_http_methods(["POST"])
+def add_todo_form(request):
+    title = request.POST.get('title')
+    if title:
+        todo = Todo.objects.create(title=title, owner=request.user)
+    return redirect('index')
+
+
+@login_required
+@require_http_methods(["POST"])
 def add_todo(request):
     try:
         # Parse the incoming JSON request body
-        try:
-            my_method = 'js'
-            data = json.loads(request.body)
-            title = data.get('title')
-        except:
-            title = request.POST.get('title')
-            my_method = 'enter'
+        data = json.loads(request.body)
+        title = data.get('title')
 
         if title:
             # Create and save the todo
@@ -65,9 +69,9 @@ def add_todo(request):
                 'id': todo.id,
                 'title': todo.truncated_title,
                 'is_complete': todo.is_complete
-            }) if my_method == 'js' else redirect(reverse('index'))
+            })
         else:
-            return JsonResponse({'status': 'fail', 'error': 'No title provided'})
+            return JsonResponse({'status': 'fail', 'error': 'No title provided'}, status=400)
 
     except json.JSONDecodeError:
         return JsonResponse({'status': 'fail', 'error': 'Invalid JSON data'})
