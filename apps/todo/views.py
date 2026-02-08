@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Todo
 import json
@@ -30,12 +30,16 @@ class IndexView(LoginRequiredMixin, ListView):
         return context
 
 
-@login_required
-def profile(request):
-    user = request.user
-    todos = Todo.objects.filter(is_deleted=False)
-    active_todos_count = todos.filter(is_complete=False).count()
-    return render(request, "profile.html", {'user': user, 'todos': todos, 'active_todos_count': active_todos_count})
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # 'todos': todos, 'active_todos_count': active_todos_count
+        context['all_todos_count'] = Todo.objects.filter(owner=self.request.user, is_deleted=False).count()
+        context['active_todos_count'] = Todo.objects.filter(owner=self.request.user, is_deleted=False,
+                                                            is_complete=False).count()
+        return context
 
 
 @login_required
