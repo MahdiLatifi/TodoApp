@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Todo
@@ -42,47 +43,21 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
 
 @login_required
+@require_http_methods(["POST"])
 def add_todo(request):
-    if request.method == "POST":
+    try:
+        # Parse the incoming JSON request body
         try:
-            # Parse the incoming JSON request body
-            try:
-                my_method = 'js'
-                data = json.loads(request.body)
-                title = data.get('title')
-            except:
-                title = request.POST.get('title')
-                my_method = 'enter'
+            my_method = 'js'
+            data = json.loads(request.body)
+            title = data.get('title')
+        except:
+            title = request.POST.get('title')
+            my_method = 'enter'
 
-            if title:
-                # Create and save the todo
-                todo = Todo(title=title, owner=request.user)
-                todo.save()
-
-                return JsonResponse({
-                    'status': 'success',
-                    'id': todo.id,
-                    'title': todo.truncated_title,
-                    'is_complete': todo.is_complete
-                }) if my_method == 'js' else redirect(reverse('index'))
-            else:
-                return JsonResponse({'status': 'fail', 'error': 'No title provided'})
-
-        except json.JSONDecodeError:
-            return JsonResponse({'status': 'fail', 'error': 'Invalid JSON data'})
-
-    return JsonResponse({'status': 'fail', 'error': 'Invalid request method'})
-
-
-@login_required
-def complete_todo(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        todo_id = data.get('id')
-
-        if todo_id:
-            todo = get_object_or_404(Todo, pk=todo_id, owner=request.user)
-            todo.is_complete = not todo.is_complete
+        if title:
+            # Create and save the todo
+            todo = Todo(title=title, owner=request.user)
             todo.save()
 
             return JsonResponse({
@@ -90,28 +65,48 @@ def complete_todo(request):
                 'id': todo.id,
                 'title': todo.truncated_title,
                 'is_complete': todo.is_complete
-            })
+            }) if my_method == 'js' else redirect(reverse('index'))
+        else:
+            return JsonResponse({'status': 'fail', 'error': 'No title provided'})
 
-        return JsonResponse({'status': 'fail', 'error': 'Todo ID not provided'})
-
-    return JsonResponse({'status': 'fail', 'error': 'Invalid request method'})
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'fail', 'error': 'Invalid JSON data'})
 
 
 @login_required
+@require_http_methods(["POST"])
+def complete_todo(request):
+    data = json.loads(request.body)
+    todo_id = data.get('id')
+
+    if todo_id:
+        todo = get_object_or_404(Todo, pk=todo_id, owner=request.user)
+        todo.is_complete = not todo.is_complete
+        todo.save()
+
+        return JsonResponse({
+            'status': 'success',
+            'id': todo.id,
+            'title': todo.truncated_title,
+            'is_complete': todo.is_complete
+        })
+
+    return JsonResponse({'status': 'fail', 'error': 'Todo ID not provided'})
+
+
+@login_required
+@require_http_methods(["POST"])
 def delete_todo(request):
-    if request.method == "POST":
-        data = json.loads(request.body)
-        todo_id = data.get('id')
+    data = json.loads(request.body)
+    todo_id = data.get('id')
 
-        if todo_id:
-            todo = get_object_or_404(Todo, pk=todo_id, owner=request.user)
-            todo.is_deleted = True
-            todo.save()
+    if todo_id:
+        todo = get_object_or_404(Todo, pk=todo_id, owner=request.user)
+        todo.is_deleted = True
+        todo.save()
 
-            return JsonResponse({
-                'status': 'success',
-            })
+        return JsonResponse({
+            'status': 'success',
+        })
 
-        return JsonResponse({'status': 'fail', 'error': 'Todo ID not provided'})
-
-    return JsonResponse({'status': 'fail', 'error': 'Invalid request method'})
+    return JsonResponse({'status': 'fail', 'error': 'Todo ID not provided'})
