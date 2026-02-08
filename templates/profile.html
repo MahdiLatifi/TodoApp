@@ -21,15 +21,15 @@
         <div class="content" id="content">
             <div class="todo user-detail" id="todo-1">
                 <h3>Name:</h3>
-                <p>{% if user.first_name %}{{ user.first_name }}{% else %}{% endif %}</p>
+                <p>{% if request.user.first_name %}{{ request.user.first_name }}{% else %}{% endif %}</p>
             </div>
             <div class="todo user-detail" id="todo-2">
                 <h3>Lastname:</h3>
-                <p>{% if user.last_name %}{{ user.last_name }}{% else %}{% endif %}</p>
+                <p>{% if request.user.last_name %}{{ request.user.last_name }}{% else %}{% endif %}</p>
             </div>
             <div class="todo user-detail" id="todo-2">
                 <h3>All Todos:</h3>
-                <p>{{ todos.count }}</p>
+                <p>{{ all_todos_count }}</p>
             </div>
             <div class="todo user-detail" id="todo-2">
                 <h3>Active Todos:</h3>
