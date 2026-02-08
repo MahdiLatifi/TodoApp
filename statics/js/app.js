@@ -1,3 +1,14 @@
+function change_to_sign_up() {
+    document.getElementById("sign-up-form").classList.remove("hidden");
+    document.getElementById("login-form").classList.add("hidden");
+}
+
+function change_to_login() {
+    document.getElementById("login-form").classList.remove("hidden");
+    document.getElementById("sign-up-form").classList.add("hidden");
+}
+
+
 function changeEyeToOpen() {
     document.getElementById("id_password").setAttribute("type", "text");
     document.getElementById("closeEye").classList.add("hidden");
