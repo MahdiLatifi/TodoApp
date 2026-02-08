@@ -35,10 +35,9 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # 'todos': todos, 'active_todos_count': active_todos_count
-        context['all_todos_count'] = Todo.objects.filter(owner=self.request.user, is_deleted=False).count()
-        context['active_todos_count'] = Todo.objects.filter(owner=self.request.user, is_deleted=False,
-                                                            is_complete=False).count()
+        user_todos = Todo.objects.filter(owner=self.request.user, is_deleted=False)
+        context['all_todos_count'] = user_todos.count()
+        context['active_todos_count'] = user_todos.filter(is_complete=False).count()
         return context
 
 
